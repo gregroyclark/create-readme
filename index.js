@@ -24,13 +24,9 @@ function promptUser() {
       message: "How do install & use your project?"
     },
     {
-      type: "checkbox",
+      type: "input",
       name: "license",
       message: "License:",
-      choices: [ "https://img.shields.io/badge/License-MIT-blue",
-        "none",
-        "other"
-      ]
     },
     {
       type: "checkbox",
