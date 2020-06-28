@@ -82,7 +82,7 @@ function generateMarkdown(answers) {
   <p>${answers.install}</p>
   <hr>
   <div id="tech"><h2>Technology</h2></div>           
-  <p>${answers.tech}</p>
+  <p>${answers.tech + " "}</p>
   <hr>
   <div id="use"><h2>Usage</h2></div>
   <p>Reference information</p>  
