@@ -29,8 +29,5 @@
   <p><img src= assets/create-readme.gif></p>
   <hr>
   <div id="contr"><h2>Contributors</h2> </div>
-
-  GitHub       
-  <ul>
-  <li>Github: <a href= "https://github.com/gregroyclark/">https://github.com/gregroyclark/</a></li>
-  </ul> 
+   
+  <h4>Github:</h4> <a href= "https://github.com/gregroyclark/">https://github.com/gregroyclark/</a>

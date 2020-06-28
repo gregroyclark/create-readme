@@ -95,10 +95,7 @@ function generateMarkdown(answers) {
   <hr>
   <div id="contr"><h2>Contributors</h2> </div>
 
-  GitHub       
-  <ul>
-  <li>Github: <a href= "https://github.com/${answers.github}/">https://github.com/${answers.github}/</a></li>
-  </ul> `;
+  <h4>Github:<h4> <a href= "https://github.com/${answers.github}/">https://github.com/${answers.github}/</a>`;
 }
 
 async function init() {
