@@ -29,6 +29,11 @@ function promptUser() {
       message: "License:",
     },
     {
+      type: "input",
+      name: "example",
+      message: "Please provide an example (gif/screenshot) if you have one."
+    },
+    {
       type: "checkbox",
       name: "tech",
       message: "What technologies did you utilize for this project?",
@@ -87,7 +92,7 @@ function generateMarkdown(answers) {
   <p><img align="left" src= ${answers.license}></p><br>
   <hr>
   <div id="screen"><h2>Screenshots</h2></div>
-  <p><img src= ""><img src= ""><img src= ""></p>
+  <p><img src= ${answers.example}></p>
   <hr>
   <div id="contr"><h2>Contributors</h2> </div>
 
