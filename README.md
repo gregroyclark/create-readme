@@ -15,10 +15,10 @@
   Takes your input, returns a well formatted README.md file.
   <hr>
   <div id="install"><h2>Installation</h2> </div>
-  <p>Fork repository, run "node index.js"</p>
+  <p>Fork repo, run 'node index.js'</p>
   <hr>
   <div id="tech"><h2>Technology</h2></div>           
-  <p>HTML,JavaScript,Node/Express.js</p>
+  <p>HTML, JavaScript, Node/Express.js</p>
   <hr>
   <div id="use"><h2>Usage</h2></div>
   <p>Reference information</p>  
