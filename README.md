@@ -27,7 +27,7 @@
   <p><img align="left" src= https://img.shields.io/badge/License-MIT-blue></p><br>
   <hr>
   <div id="screen"><h2>Screenshots</h2></div>
-  <p><img src= create-readme.gif></p>
+  <p><img src= assets/create-readme.gif></p>
   <hr>
   <div id="contr"><h2>Contributors</h2> </div>
 
