@@ -103,16 +103,3 @@ async function init() {
 }
 
 init();
-// ]).then(function(data) {
-//     let filename = data.name.toLowerCase().split(' ').join('') + ".md";
-
-//     fs.writeFile(filename, md.stringify(data, null, '\t'), function(err) {
-      
-//       if (err) {
-//         return console.log(err);
-//       }
-
-//       console.log("Success!");
-
-//     });
-// });
