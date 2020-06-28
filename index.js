@@ -34,19 +34,19 @@ function promptUser() {
       message: "What technologies did you utilize for this project?",
       choices: [
         "HTML",
-        "CSS",
-        "JavaScript",
-        "Node/Express.js",
-        "Handlebars.js",
-        "React.js",
-        "Angular.js",
-        "Vue.js",
-        "MySQL",
-        "MongoDB",
-        "PostgresQL",
-        "C",
-        "Java",
-        "Kotlin"
+        " CSS",
+        " JavaScript",
+        " Node/Express.js",
+        " Handlebars.js",
+        " React.js",
+        " Angular.js",
+        " Vue.js",
+        " MySQL",
+        " MongoDB",
+        " PostgresQL",
+        " C",
+        " Java",
+        " Kotlin"
       ]
     },
     {
