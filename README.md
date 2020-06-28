@@ -7,8 +7,7 @@
   <li><a href="#use">Usage</a></li> 
   <li><a href="#license">License</a></li>
   <li><a href="#screen">Screenshots</a></li> 
-  <li><a href="#contr">Contributors</a></li> 
-  <li><a href="#quest">Questions</a></li>  
+  <li><a href="#contr">Contributors</a></li>
   </ul>
     <hr>
   <div id="descrip"><h2>Description</h2> </div>
