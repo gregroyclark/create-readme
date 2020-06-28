@@ -25,6 +25,15 @@ function promptUser() {
     },
     {
       type: "checkbox",
+      name: "license",
+      message: "License:",
+      choices: [ "https://img.shields.io/badge/License-MIT-blue",
+        "none",
+        "other"
+      ]
+    },
+    {
+      type: "checkbox",
       name: "tech",
       message: "What technologies did you utilize for this project?",
       choices: [
@@ -43,6 +52,11 @@ function promptUser() {
         "Java",
         "Kotlin"
       ]
+    },
+    {
+      type: "input",
+      name: "github",
+      message: "What is your GitHub username?"
     }
   ]);
 }
@@ -71,21 +85,20 @@ function generateMarkdown(answers) {
   <p>${answers.tech}</p>
   <hr>
   <div id="use"><h2>Usage</h2></div>
-  <p>Reference information </p>  
+  <p>Reference information</p>  
   <hr>
   <div id="license"><h2>License</h2></div>
-  <p><img align="left" src= "https://img.shields.io/badge/License-MIT-blue"></p><br>
+  <p><img align="left" src= ${answers.license}></p><br>
   <hr>
   <div id="screen"><h2>Screenshots</h2></div>
   <p><img src= ""><img src= ""><img src= ""></p>
   <hr>
   <div id="contr"><h2>Contributors</h2> </div>
 
-  Gregory Clark       
+  GitHub       
   <ul>
-  <li>Github: <a href= "https://github.com/gregroyclark/">https://github.com/gregroyclark/</a></li>
-  <li>Portfolio: <a href= "https://gregroyclark.github.io/">https://gregroyclark.github.io/</a></li>    
-  <li>LinkedIn: <a href= "https://www.linkedin.com/in/gregoryclark">https://www.linkedin.com/in/gregoryclark</a></li>
+  <li></li>
+  <li>Github: <a href= "https://github.com/${answers.github}/">https://github.com/${answers.github}/</a></li>
   </ul> `;
 }
 
