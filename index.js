@@ -18,10 +18,14 @@ require('dotenv').config();
 
 inquirer.prompt([
     {
-
+        type: "input",
+        name: "project title",
+        message: "What is the name of your project?"
     },
     {
-
+        type: "input",
+        name: "description",
+        message: "Describe your project."
     },
     {
 
