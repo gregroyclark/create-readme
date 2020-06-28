@@ -48,7 +48,7 @@ function promptUser() {
 }
 
 function generateMarkdown(answers) {
-  return `<h1 align= "center">{answers.title}</h1> 
+  return `<h1 align= "center">${answers.title}</h1> 
   <h2>Table of Contents<h2>
   <ul>
   <li><a href="#descrip">Description</a></li>  
@@ -62,13 +62,13 @@ function generateMarkdown(answers) {
   </ul>
     <hr>
   <div id="descrip"><h2>Description</h2> </div>
-  {answers.description}
+  ${answers.description}
   <hr>
   <div id="install"><h2>Installation</h2> </div>
-  <p>{answers.install}</p>
+  <p>${answers.install}</p>
   <hr>
   <div id="tech"><h2>Technology</h2></div>           
-  <p>{answers.tech}</p>
+  <p>${answers.tech}</p>
   <hr>
   <div id="use"><h2>Usage</h2></div>
   <p>Reference information </p>  
