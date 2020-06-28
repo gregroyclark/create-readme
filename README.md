@@ -32,6 +32,5 @@
 
   GitHub       
   <ul>
-  <li></li>
   <li>Github: <a href= "https://github.com/gregroyclark/">https://github.com/gregroyclark/</a></li>
   </ul> 

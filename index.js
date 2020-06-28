@@ -97,7 +97,6 @@ function generateMarkdown(answers) {
 
   GitHub       
   <ul>
-  <li></li>
   <li>Github: <a href= "https://github.com/${answers.github}/">https://github.com/${answers.github}/</a></li>
   </ul> `;
 }
