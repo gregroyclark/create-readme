@@ -10,43 +10,45 @@ function promptUser() {
   return inquirer.prompt([
     {
         type: "input",
-        name: "project title",
+        name: "title",
         message: "What is the name of your project?"
     },
     {
         type: "input",
         name: "description",
         message: "Describe your project."
-    // },
-    // {
-
-    // },
-    // {
-
-    // },
-    // {
-
-    // },
-    // {
-
-    // },
-    // {
-
-    // },
-    // {
-
-    // },
-    // {
-
-    // },
-    // {
-    //[]
+    },
+    {
+      type: "input",
+      name: "install",
+      message: "How do install & use your project?"
+    },
+    {
+      type: "checkbox",
+      name: "tech",
+      message: "What technologies did you utilize for this project?",
+      choices: [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Node/Express.js",
+        "Handlebars.js",
+        "React.js",
+        "Angular.js",
+        "Vue.js",
+        "MySQL",
+        "MongoDB",
+        "PostgresQL",
+        "C",
+        "Java",
+        "Kotlin"
+      ]
     }
   ]);
 }
 
 function generateMarkdown(answers) {
-  return `  <h1 align= "center">{answers.title}</h1> 
+  return `<h1 align= "center">{answers.title}</h1> 
   <h2>Table of Contents<h2>
   <ul>
   <li><a href="#descrip">Description</a></li>  
