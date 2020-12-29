@@ -1,12 +1,12 @@
 {
-  "name": "static-site",
+  "name": "create-readme",
   "version": "1.0.0",
-  "description": "",
+  "description": "Node.js command line tool that generates a well formatted README.md file based on user input.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Greg Clark",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.0",
