@@ -23,7 +23,7 @@
   <p>Reference information</p>  
   <hr>
   <div id="license"><h2>License</h2></div>
-  <p><img align="left" src= https://img.shields.io/badge/License-MIT-blue></p><br>
+  <p><img align="left" src="https://img.shields.io/badge/License-MIT-blue"></p><br>
   <hr>
   <div id="screen"><h2>Screenshots</h2></div>
   <p><img src= assets/create-readme.gif></p>
