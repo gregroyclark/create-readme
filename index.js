@@ -104,7 +104,7 @@ function generateMarkdown(answers) {
 }
 
 async function init() {
-  console.log("hi")
+  console.log("create-readme")
   try {
     const answers = await promptUser();
 
