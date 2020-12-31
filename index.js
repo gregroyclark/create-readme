@@ -108,7 +108,7 @@ async function init() {
 
     await writeFileAsync("PASTEME.md", md);
 
-    console.log("Successfully wrote to README.md");
+    console.log("Successfully wrote to PASTEME.md");
   } catch(err) {
     console.log(err);
   }
