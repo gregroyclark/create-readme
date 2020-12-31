@@ -4,7 +4,6 @@
   <li><a href="#descrip">Description</a></li>  
   <li><a href="#instructions">Instructions</a></li> 
   <li><a href="#tech">Technology</a></li> 
-  <li><a href="#use">Usage</a></li> 
   <li><a href="#license">License</a></li>
   <li><a href="#screen">Screenshots</a></li> 
   <li><a href="#contr">Contributors</a></li>
@@ -22,9 +21,6 @@
   <hr>
   <div id="tech"><h2>Technology</h2></div>           
   <p>HTML, JavaScript, Node/Express.js</p>
-  <hr>
-  <div id="use"><h2>Usage</h2></div>
-  <p>Reference information</p>  
   <hr>
   <div id="license"><h2>License</h2></div>
   <p><img align="left" src="https://img.shields.io/badge/License-MIT-blue"></p><br>
