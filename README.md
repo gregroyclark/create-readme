@@ -2,7 +2,7 @@
   <h2>Table of Contents<h2>
   <ul>
   <li><a href="#descrip">Description</a></li>  
-  <li><a href="#install">Installation</a></li> 
+  <li><a href="#instructions">Instructions</a></li> 
   <li><a href="#tech">Technology</a></li> 
   <li><a href="#use">Usage</a></li> 
   <li><a href="#license">License</a></li>
@@ -13,8 +13,12 @@
   <div id="descrip"><h2>Description</h2> </div>
   Takes your input, returns well formatted README.md file.
   <hr>
-  <div id="install"><h2>Installation</h2> </div>
-  <p>Fork repository, run 'node index.js'</p>
+  <div id="instructions"><h2>Instructions</h2> </div>
+  <p>
+  Fork repository, run 'node index.js'
+  <br/>
+  Copy & paste the contents of created file into your project's README.md file!
+  </p>
   <hr>
   <div id="tech"><h2>Technology</h2></div>           
   <p>HTML, JavaScript, Node/Express.js</p>
