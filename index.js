@@ -68,7 +68,7 @@ function promptUser() {
 }
 
 function generateMarkdown(answers) {
-  return `<h1 align= "center">${answers.title}</h1> 
+  return `<h1 align="center">${answers.title}</h1> 
   <h2>Table of Contents<h2>
   <ul>
   <li><a href="#descrip">Description</a></li>  
@@ -100,7 +100,7 @@ function generateMarkdown(answers) {
   <hr>
   <div id="contr"><h2>Contributors</h2> </div>
 
-  <h4>Github:<h4> <a href= "https://github.com/${answers.github}/">https://github.com/${answers.github}/</a>`;
+  <h4>Github:<h4> <a href="https://github.com/${answers.github}/">https://github.com/${answers.github}/</a>`;
 }
 
 async function init() {
