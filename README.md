@@ -17,6 +17,8 @@
   Fork repository, run 'node index.js'
   <br/>
   Copy & paste the contents of created file into your project's README.md file!
+  <br/>
+  Delete your PASTEME.md file when finished, or leave it to be overwritten upon next use!
   </p>
   <hr>
   <div id="tech"><h2>Technology</h2></div>           
