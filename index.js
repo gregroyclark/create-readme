@@ -53,7 +53,7 @@ function promptUser() {
         " Rails",
         " MySQL",
         " MongoDB",
-        " PostgresQL",
+        " PostgreSQL",
         " C",
         " Java",
         " Kotlin"
