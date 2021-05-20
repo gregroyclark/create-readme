@@ -122,12 +122,13 @@ function generateMarkdown(answers) {
   <br>
   <hr>
   
-  <div id="contributors"><h2>Contributors</h2> </div>
-
-  <h4>Github:<h4>
-  <a href="https://github.com/${answers.github}/">
-    https://github.com/${answers.github}/
-  </a>`;
+  <div id="contributors"><h2>Contributors</h2></div>
+  <p>
+    Github:
+    <a href="https://github.com/${answers.github}/">
+      https://github.com/${answers.github}/
+    </a>
+  </p>`;
 }
 
 async function init() {
