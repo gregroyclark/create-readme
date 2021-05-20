@@ -116,13 +116,16 @@ function generateMarkdown(answers) {
   <hr>
   
   <div id="license"><h2>License</h2></div>
-  <p><img align="left" src= ${answers.license}></p><br>
+  <p><img align="left" src=${answers.license}></p><br>
   
   <hr>
   
   <div id="contributors"><h2>Contributors</h2> </div>
 
-  <h4>Github:<h4> <a href="https://github.com/${answers.github}/">https://github.com/${answers.github}/</a>`;
+  <h4>Github:<h4>
+  <a href="https://github.com/${answers.github}/">
+    https://github.com/${answers.github}/
+  </a>`;
 }
 
 async function init() {
