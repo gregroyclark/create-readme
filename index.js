@@ -101,7 +101,7 @@ function generateMarkdown(answers) {
   <hr>
 
   <div id="demo"><h2>Demo</h2></div>
-  <p><img src=${answers.example}></p>
+  <p><img src="${answers.example}"></p>
 
   <hr>
 
@@ -116,7 +116,7 @@ function generateMarkdown(answers) {
   <hr>
   
   <div id="license"><h2>License</h2></div>
-  <p><img align="left" src=${answers.license}></p><br>
+  <p><img align="left" src="${answers.license}"></p><br>
   
   <hr>
   
