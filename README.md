@@ -18,7 +18,9 @@
     <hr>
   <div id="description"><h2>Description</h2> </div>
   <p>
-    Takes your input about your project and returns well formatted README.md file.
+    Takes input about your project and returns well formatted starter README.md file.
+    <br>
+    Add more markdown to suit your project's specific needs.
   </p>
 
   <br>
