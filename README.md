@@ -6,7 +6,7 @@
   <li><a href="#instructions">Instructions</a></li>
   <li><a href="#tech">Technology</a></li>
   <li><a href="#license">License</a></li>
-  <li><a href="#contr">Contributors</a></li>
+  <li><a href="#contributors">Contributors</a></li>
   </ul>
     <hr>
   <div id="description"><h2>Description</h2> </div>
@@ -30,6 +30,6 @@
   <div id="license"><h2>License</h2></div>
   <p><img align="left" src="https://img.shields.io/badge/License-MIT-blue"></p><br>
   <hr>
-  <div id="contr"><h2>Contributors</h2> </div>
+  <div id="contributors"><h2>Contributors</h2> </div>
    
   <h4>Github:</h4> <a href="https://github.com/gregroyclark/">https://github.com/gregroyclark/</a>
