@@ -44,8 +44,10 @@
   - Answer the prompts to the best of your ability
   <br/>
   - Copy & paste the contents of created file into your project's README.md file!
+  <br>
+  - Add more finely tailored markdown as needed for your specific project.
   <br/>
-  Delete your PASTEME.md file when finished, or leave it to be overwritten upon next use!
+  - Delete your PASTEME.md file when finished, or leave it to be overwritten upon next use!
   </p>
   
   <hr>
