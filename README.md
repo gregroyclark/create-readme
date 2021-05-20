@@ -1,7 +1,7 @@
 <h1 align="center">create-readme</h1> 
   <h2>Table of Contents<h2>
   <ul>
-  <li><a href="#descrip">Description</a></li>
+  <li><a href="#description">Description</a></li>
   <li><a href="#demo">Demo</a></li>
   <li><a href="#instructions">Instructions</a></li>
   <li><a href="#tech">Technology</a></li>
@@ -9,7 +9,7 @@
   <li><a href="#contr">Contributors</a></li>
   </ul>
     <hr>
-  <div id="descrip"><h2>Description</h2> </div>
+  <div id="description"><h2>Description</h2> </div>
   Takes your input, returns well formatted README.md file.
   <hr>
   <div id="demo"><h2>Demo</h2></div>
