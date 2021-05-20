@@ -29,9 +29,13 @@ function promptUser() {
       message: "How does one use your project?"
     },
     {
-      type: "input",
+      type: "checkbox",
       name: "license",
       message: "License:",
+      choices: [
+        "The MIT License - https://img.shields.io/badge/License-MIT-blue",
+        "Other"
+      ]
     },
     {
       type: "checkbox",
