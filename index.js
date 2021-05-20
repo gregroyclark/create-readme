@@ -33,8 +33,8 @@ function promptUser() {
       name: "license",
       message: "License:",
       choices: [
-        "The MIT License - https://img.shields.io/badge/License-MIT-blue",
-        "Other"
+        "https://img.shields.io/badge/License-MIT-blue",
+        ""
       ]
     },
     {
@@ -117,8 +117,9 @@ function generateMarkdown(answers) {
   <hr>
   
   <div id="license"><h2>License</h2></div>
-  <p><img align="left" src="${answers.license}"></p><br>
+  <p><img align="left" src="${answers.license}"></p>
   
+  <br>
   <hr>
   
   <div id="contributors"><h2>Contributors</h2> </div>
