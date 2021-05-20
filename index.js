@@ -20,6 +20,11 @@ function promptUser() {
     },
     {
       type: "input",
+      name: "example",
+      message: "Please provide an example (gif/screenshot) if you have one."
+    },
+    {
+      type: "input",
       name: "instructions",
       message: "How does one use your project?"
     },
@@ -27,11 +32,6 @@ function promptUser() {
       type: "input",
       name: "license",
       message: "License:",
-    },
-    {
-      type: "input",
-      name: "example",
-      message: "Please provide an example (gif/screenshot) if you have one."
     },
     {
       type: "checkbox",
