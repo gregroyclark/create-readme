@@ -53,7 +53,7 @@
   <hr>
   
   <div id="tech"><h2>Technology</h2></div>           
-  <p>HTML, JavaScript, Node/Express.js</p>
+  <p>HTML, JavaScript, Node.js</p>
   
   <hr>
   
