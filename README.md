@@ -1,12 +1,19 @@
 <h1 align="center">create-readme</h1> 
   <h2>Table of Contents<h2>
   <ul>
-  <li><a href="#description">Description</a></li>
-  <li><a href="#demo">Demo</a></li>
-  <li><a href="#instructions">Instructions</a></li>
-  <li><a href="#tech">Technology</a></li>
-  <li><a href="#license">License</a></li>
-  <li><a href="#contributors">Contributors</a></li>
+    <li>
+      <a href="#description">Description</a>
+    </li>
+      <li><a href="#demo">Demo</a>
+    </li>
+      <li><a href="#instructions">Instructions</a>
+    </li>
+      <li><a href="#tech">Technology</a>
+    </li>
+      <li><a href="#license">License</a>
+    </li>
+      <li><a href="#contributors">Contributors</a>
+    </li>
   </ul>
     <hr>
   <div id="description"><h2>Description</h2> </div>
@@ -17,9 +24,17 @@
   <hr>
   <div id="instructions"><h2>Instructions</h2> </div>
   <p>
-  Fork repository, run 'node index.js'
+  Currently a backend-only project.
+  <br>
+  In your preferred terminal:
+  <br>
+  - Clone or fork repository
+  <br>
+  - Run 'node index.js'
+  <br>
+  - Answer the prompts to the best of your ability
   <br/>
-  Copy & paste the contents of created file into your project's README.md file!
+  - Copy & paste the contents of created file into your project's README.md file!
   <br/>
   Delete your PASTEME.md file when finished, or leave it to be overwritten upon next use!
   </p>
