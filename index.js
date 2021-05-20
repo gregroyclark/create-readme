@@ -72,7 +72,7 @@ function generateMarkdown(answers) {
   <h2>Table of Contents<h2>
   <ul>
   <li><a href="#description">Description</a></li>
-  <li><a href="#screen">Screenshots</a></li>
+  <li><a href="#demo">Demo</a></li>
   <li><a href="#instructions">Instructions</a></li>
   <li><a href="#tech">Technology</a></li>
   <li><a href="#license">License</a></li>
@@ -82,7 +82,7 @@ function generateMarkdown(answers) {
   <div id="description"><h2>Description</h2> </div>
   ${answers.description}
   <hr>
-  <div id="screen"><h2>Screenshots</h2></div>
+  <div id="demo"><h2>Demo</h2></div>
   <p><img src= ${answers.example}></p>
   <hr>
   <div id="instructions"><h2>Instructions</h2> </div>
