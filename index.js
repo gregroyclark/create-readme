@@ -71,15 +71,27 @@ function generateMarkdown(answers) {
   return `<h1 align="center">${answers.title}</h1> 
   <h2>Table of Contents<h2>
   <ul>
-  <li><a href="#description">Description</a></li>
-  <li><a href="#demo">Demo</a></li>
-  <li><a href="#instructions">Instructions</a></li>
-  <li><a href="#tech">Technology</a></li>
-  <li><a href="#license">License</a></li>
-  <li><a href="#contributors">Contributors</a></li>
+    <li>
+     <a href="#description">Description</a>
+    </li>
+    <li>
+      <a href="#demo">Demo</a>
+    </li>
+    <li>
+      <a href="#instructions">Instructions</a>
+    </li>
+    <li>
+      <a href="#tech">Technology</a>
+    </li>
+    <li>
+      <a href="#license">License</a>
+    </li>
+    <li>
+      <a href="#contributors">Contributors</a>
+    </li>
   </ul>
     <hr>
-  <div id="description"><h2>Description</h2> </div>
+  <div id="description"><h2>Description</h2></div>
   ${answers.description}
   <hr>
   <div id="demo"><h2>Demo</h2></div>
