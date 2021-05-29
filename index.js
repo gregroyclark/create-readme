@@ -136,9 +136,9 @@ async function init() {
   try {
     const answers = await promptUser();
 
-    const md = generateMarkdown(answers);
+    const markdown = generateMarkdown(answers);
 
-    await writeFileAsync("PASTEME.md", md);
+    await writeFileAsync("PASTEME.md", markdown);
 
     console.log("Successfully wrote to PASTEME.md");
   } catch(err) {
