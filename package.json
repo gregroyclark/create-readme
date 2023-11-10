@@ -9,7 +9,7 @@
   "author": "Greg Clark",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^1.6.0",
     "dotenv": "^8.0.0",
     "fs": "0.0.1-security",
     "inquirer": "^6.3.1"
