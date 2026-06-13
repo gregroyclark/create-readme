@@ -12,6 +12,6 @@
     "axios": "^1.16.0",
     "dotenv": "^8.0.0",
     "fs": "0.0.1-security",
-    "inquirer": "^6.3.1"
+    "inquirer": "^14.0.2"
   }
 }
