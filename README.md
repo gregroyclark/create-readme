@@ -8,6 +8,8 @@ A repo-aware CLI that turns facts already in a project into a clean, useful READ
 
 > Version 2 is under active development. The CLI works locally; the scoped npm package has not been published yet.
 
+Website: [createreadme.com](https://createreadme.com)
+
 ## Why this exists
 
 The original 2020 project asked a short series of questions and wrote the answers into `PASTEME.md`. Version 2 keeps that friendly workflow, but starts by inspecting the repository so developers only answer what the code cannot already tell us.
@@ -118,6 +120,13 @@ npm run check
 ```
 
 The test suite uses Node's built-in test runner and covers remote parsing, repository inspection, model overrides, badge rendering, Markdown validation, CLI flags, safe writes, and CI checks.
+
+The website is a dependency-light static build served by Cloudflare Workers:
+
+```bash
+npm run site:dev
+npm run site:check
+```
 
 ## The original
 

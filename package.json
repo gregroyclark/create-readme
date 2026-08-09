@@ -22,7 +22,10 @@
     "test": "node --test",
     "test:coverage": "node --test --experimental-test-coverage",
     "check": "npm test && npm audit --omit=dev",
-    "start": "node ./bin/create-readme.js"
+    "start": "node ./bin/create-readme.js",
+    "site:dev": "wrangler dev",
+    "site:check": "wrangler deploy --dry-run --outdir .wrangler/dry-run",
+    "site:deploy": "wrangler deploy"
   },
   "engines": {
     "node": ">=22.13.0"
@@ -37,7 +40,7 @@
   "bugs": {
     "url": "https://github.com/gregroyclark/create-readme/issues"
   },
-  "homepage": "https://github.com/gregroyclark/create-readme#readme",
+  "homepage": "https://createreadme.com",
   "keywords": [
     "cli",
     "documentation",
@@ -49,5 +52,8 @@
   "license": "MIT",
   "dependencies": {
     "@inquirer/prompts": "^8.5.2"
+  },
+  "devDependencies": {
+    "wrangler": "^4.120.0"
   }
 }

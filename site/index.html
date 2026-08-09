@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f2ea">
+    <meta name="description" content="Generate polished README files from facts already in your repository.">
+    <meta property="og:title" content="create-readme — Great READMEs, less busywork.">
+    <meta property="og:description" content="A repo-aware, open-source CLI for generating clean GitHub-flavored Markdown.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://createreadme.com">
+    <meta property="og:image" content="https://createreadme.com/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://createreadme.com">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles.css">
+    <title>create-readme — Great READMEs, less busywork.</title>
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="wordmark" href="#top" aria-label="create-readme home">create-readme</a>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="#how-it-works">How it works</a>
+          <a href="#roadmap">Roadmap</a>
+          <a href="https://github.com/gregroyclark/create-readme">GitHub</a>
+        </nav>
+        <a class="github-button" href="https://github.com/gregroyclark/create-readme" aria-label="View create-readme on GitHub">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 .8a11.4 11.4 0 0 0-3.6 22.2c.6.1.8-.2.8-.6v-2.2c-3.4.7-4.1-1.4-4.1-1.4-.5-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.3.1 2 1.3 2 1.3 1.1 1.9 2.9 1.4 3.6 1 .1-.8.4-1.4.8-1.7-2.7-.3-5.6-1.4-5.6-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.6.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.9 0C17.1 5 18 5.3 18 5.3c.7 1.5.3 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.9 5.4-5.6 5.7.4.4.8 1.1.8 2.1v3.1c0 .4.2.7.8.6A11.4 11.4 0 0 0 12 .8Z"/></svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero shell" id="top">
+        <div class="hero-copy">
+          <h1>Great READMEs,<br>less busywork.</h1>
+          <p>create-readme scans your repository, asks only what’s missing, and generates clean GitHub-flavored Markdown you can review before writing.</p>
+          <div class="hero-actions">
+            <a class="button button-dark" href="https://github.com/gregroyclark/create-readme">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 .8a11.4 11.4 0 0 0-3.6 22.2c.6.1.8-.2.8-.6v-2.2c-3.4.7-4.1-1.4-4.1-1.4-.5-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.3.1 2 1.3 2 1.3 1.1 1.9 2.9 1.4 3.6 1 .1-.8.4-1.4.8-1.7-2.7-.3-5.6-1.4-5.6-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.6.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.9 0C17.1 5 18 5.3 18 5.3c.7 1.5.3 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.9 5.4-5.6 5.7.4.4.8 1.1.8 2.1v3.1c0 .4.2.7.8.6A11.4 11.4 0 0 0 12 .8Z"/></svg>
+              View on GitHub
+            </a>
+            <a class="text-link" href="https://github.com/gregroyclark/create-readme/blob/master/docs/v2-spec.md">Read the v2 spec <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+
+        <figure class="terminal terminal-hero" aria-label="Example create-readme terminal session">
+          <div class="terminal-bar" aria-hidden="true">
+            <span></span><span></span><span></span>
+            <b>create-readme</b>
+          </div>
+          <div class="terminal-body">
+            <p><span class="prompt">$</span> <span class="acid">create-readme</span> ./acme</p>
+            <p>Found <span class="acid">package.json</span> · <span class="acid">Node.js</span> · <span class="acid">MIT</span> · <span class="acid">GitHub Actions</span></p>
+            <p><span class="acid">4</span> facts confirmed · <span class="acid">3</span> questions remaining</p>
+            <div class="terminal-rule"><span class="acid">✓</span> README preview</div>
+            <div class="readme-preview">
+              <p><strong># acme</strong></p>
+              <p>A tiny toolkit for building reliable CLIs.</p>
+              <p><strong>## Features</strong></p>
+              <p>– Fast and lightweight<br>– Zero runtime dependencies<br>– Built for Node.js ≥ 22</p>
+              <p><strong>## Installation</strong></p>
+              <p class="dim">npm install acme</p>
+            </div>
+          </div>
+        </figure>
+
+        <div class="source-command" aria-label="Run create-readme from source">
+          <span class="command-label">Run from source today</span>
+          <code>git clone https://github.com/gregroyclark/create-readme && cd create-readme && npm install && npm link</code>
+          <button class="copy-button" type="button" data-copy-command>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 8h10v12H9zM5 4h10v2H7v10H5z"/></svg>
+            <span data-copy-label>Copy</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="detected-section" id="how-it-works">
+        <div class="shell detected-grid">
+          <div class="section-intro">
+            <h2>Your repository already knows a lot.</h2>
+            <p>create-readme detects the facts it can with zero setup, then asks for the human details only you know.</p>
+          </div>
+          <ul class="facts-list">
+            <li><span class="fact-icon" aria-hidden="true">◇</span><div><strong>Package manager</strong><span>package.json · Node.js</span></div></li>
+            <li><span class="fact-icon" aria-hidden="true">§</span><div><strong>License</strong><span>LICENSE · MIT</span></div></li>
+            <li><span class="fact-icon" aria-hidden="true">⑂</span><div><strong>CI/CD</strong><span>.github/workflows · Actions</span></div></li>
+          </ul>
+          <div class="flow" aria-label="Repository scanning flow">
+            <span>Repository</span><i aria-hidden="true"></i><span>Scanner</span><i aria-hidden="true"></i><span>Guided questions</span><i aria-hidden="true"></i><strong>README.md</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="ways-section shell" id="roadmap">
+        <div class="ways-heading">
+          <h2>One engine, three ways to work.</h2>
+          <p>The same repository scanner and Markdown renderer will power every surface.</p>
+        </div>
+
+        <div class="product-lanes">
+          <article class="product-lane cli-lane">
+            <div class="lane-header">
+              <h3><span aria-hidden="true">〉_</span> CLI</h3>
+              <span class="status status-live">Available in v2 beta</span>
+            </div>
+            <p>The fastest way to generate a polished README from your terminal.</p>
+            <div class="mini-terminal" aria-label="CLI generation example">
+              <p><span class="prompt">$</span> <span class="acid">create-readme</span> .</p>
+              <p>✓ Scanning repository <span>Done</span></p>
+              <p>✓ Detecting facts <span>Done</span></p>
+              <p>✓ Rendering README.md <span>Done</span></p>
+              <p class="mini-result">▣ README.md generated</p>
+              <p class="dim">Review: <b>open README.md</b><br>Commit: <b>git add README.md</b></p>
+            </div>
+            <a class="lane-link" href="https://github.com/gregroyclark/create-readme#readme">View CLI docs <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="product-lane studio-lane">
+            <div class="lane-header">
+              <h3><span aria-hidden="true">▤</span> Studio</h3>
+              <span class="status status-planned">Planned</span>
+            </div>
+            <p>A focused visual workspace to compose, preview, and refine your README.</p>
+            <div class="studio-preview" aria-label="Planned Studio interface concept">
+              <div class="studio-nav"><small>Sections</small><b>Overview</b><span>Installation</span><span>Usage</span><span>License</span></div>
+              <div class="studio-doc">
+                <small>Preview</small><strong># create-readme</strong><p>Generate thoughtful README files from facts already in your repo.</p>
+                <div><i>npm</i> <i>v2 beta</i> <i>MIT</i></div><hr><b>## Quick start</b>
+              </div>
+            </div>
+            <p class="lane-note">A future local-first surface—no signup promised.</p>
+          </article>
+
+          <article class="product-lane action-lane">
+            <div class="lane-header">
+              <h3>
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 .8a11.4 11.4 0 0 0-3.6 22.2c.6.1.8-.2.8-.6v-2.2c-3.4.7-4.1-1.4-4.1-1.4-.5-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.3.1 2 1.3 2 1.3 1.1 1.9 2.9 1.4 3.6 1 .1-.8.4-1.4.8-1.7-2.7-.3-5.6-1.4-5.6-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.6.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.9 0C17.1 5 18 5.3 18 5.3c.7 1.5.3 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.9 5.4-5.6 5.7.4.4.8 1.1.8 2.1v3.1c0 .4.2.7.8.6A11.4 11.4 0 0 0 12 .8Z"/></svg>
+                GitHub Action
+              </h3>
+              <span class="status status-planned">Planned</span>
+            </div>
+            <p>Keep README changes visible and reviewable in the pull-request flow.</p>
+            <div class="action-preview" aria-label="Planned GitHub Action interface concept">
+              <div class="action-title"><span>✓</span><strong>docs: refresh README</strong><small>succeeded</small></div>
+              <ul><li>✓ Check out repository</li><li>✓ Set up Node.js</li><li class="active">✓ Generate README</li><li>○ Commit README.md</li></ul>
+              <code>create-readme --check .</code>
+            </div>
+            <p class="lane-note">Planned after the CLI contract settles.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="open-section shell" aria-labelledby="open-heading">
+        <div>
+          <h2 id="open-heading">Built in the open.</h2>
+          <p>Deterministic, offline-friendly, and MIT licensed.<br>No account or AI key required.</p>
+        </div>
+        <div class="open-links">
+          <a href="https://github.com/gregroyclark/create-readme">Explore the source <span aria-hidden="true">→</span></a>
+          <a href="https://github.com/gregroyclark/create-readme/blob/master/docs/v2-spec.md">Read the v2 spec <span aria-hidden="true">→</span></a>
+        </div>
+        <pre class="code-mark" aria-hidden="true"><span>//</span> create-readme <span>//</span>
+   ┌─────────────┐
+───┤ <b>&lt;/&gt;</b> README ├───
+   └─────────────┘</pre>
+      </section>
+    </main>
+
+    <footer class="site-footer shell">
+      <a class="wordmark" href="#top">create-readme</a>
+      <nav aria-label="Footer navigation">
+        <a href="https://github.com/gregroyclark/create-readme">GitHub</a>
+        <a href="https://github.com/gregroyclark/create-readme/blob/master/LICENSE">MIT License</a>
+        <a href="https://github.com/gregroyclark/create-readme/blob/master/docs/v2-spec.md">v2 spec</a>
+      </nav>
+      <p>Made with care for the README people read first.</p>
+    </footer>
+  </body>
+</html>
