@@ -121,7 +121,7 @@ npm run check
 
 The test suite uses Node's built-in test runner and covers remote parsing, repository inspection, model overrides, badge rendering, Markdown validation, CLI flags, safe writes, and CI checks.
 
-The website is a dependency-light static build served by Cloudflare Workers:
+The website is a dependency-light static build served by Cloudflare Pages:
 
 ```bash
 npm run site:dev
