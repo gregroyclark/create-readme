@@ -1,17 +1,53 @@
 {
-  "name": "create-readme",
-  "version": "1.0.0",
-  "description": "Node.js command line tool that generates a well formatted README.md file based on user input.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "name": "@gregroyclark/create-readme",
+  "version": "2.0.0-beta.1",
+  "description": "Repo-aware CLI that generates polished README files from facts already in your project.",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./core": "./src/index.js"
   },
+  "bin": {
+    "create-readme": "./bin/create-readme.js"
+  },
+  "files": [
+    "bin",
+    "docs",
+    "src",
+    "index.js",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage",
+    "check": "npm test && npm audit --omit=dev",
+    "start": "node ./bin/create-readme.js"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gregroyclark/create-readme.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gregroyclark/create-readme/issues"
+  },
+  "homepage": "https://github.com/gregroyclark/create-readme#readme",
+  "keywords": [
+    "cli",
+    "documentation",
+    "github",
+    "markdown",
+    "readme"
+  ],
   "author": "Greg Clark",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "axios": "^1.18.0",
-    "dotenv": "^8.0.0",
-    "fs": "0.0.1-security",
-    "inquirer": "^6.3.1"
+    "@inquirer/prompts": "^8.5.2"
   }
 }
