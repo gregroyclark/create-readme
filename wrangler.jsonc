@@ -1,27 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "create-readme",
-  "main": "./worker/site.js",
   "compatibility_date": "2026-08-08",
-  "workers_dev": true,
-  "routes": [
-    {
-      "pattern": "createreadme.com",
-      "custom_domain": true
-    },
-    {
-      "pattern": "www.createreadme.com",
-      "custom_domain": true
-    }
-  ],
-  "assets": {
-    "directory": "./site",
-    "binding": "ASSETS",
-    "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page",
-    "run_worker_first": true
-  },
-  "observability": {
-    "enabled": true
-  }
+  "pages_build_output_dir": "./site"
 }

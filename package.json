@@ -23,9 +23,9 @@
     "test:coverage": "node --test --experimental-test-coverage",
     "check": "npm test && npm audit --omit=dev",
     "start": "node ./bin/create-readme.js",
-    "site:dev": "wrangler dev",
-    "site:check": "wrangler deploy --dry-run --outdir .wrangler/dry-run",
-    "site:deploy": "wrangler deploy"
+    "site:dev": "wrangler pages dev ./site",
+    "site:check": "node --test test/site.test.js",
+    "site:deploy": "wrangler pages deploy ./site --project-name=create-readme --branch=master"
   },
   "engines": {
     "node": ">=22.13.0"
