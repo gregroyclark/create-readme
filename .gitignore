@@ -1,4 +1,5 @@
-dotenv
 .env
+.DS_Store
+coverage
 node_modules
-notes_to_dev
+npm-debug.log*
