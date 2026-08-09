@@ -2,6 +2,22 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
+const PUBLIC_SSH_HOSTS = new Set([
+  "bitbucket.org",
+  "codeberg.org",
+  "git.sr.ht",
+  "github.com",
+  "gitlab.com",
+]);
+const PUBLIC_GITHUB_ALIASES = new Set(["github.com-personal"]);
+
+function publicSshHost(host) {
+  const normalized = host.toLowerCase();
+  if (PUBLIC_GITHUB_ALIASES.has(normalized)) {
+    return "github.com";
+  }
+  return PUBLIC_SSH_HOSTS.has(normalized) ? normalized : null;
+}
 
 async function runGit(args, cwd) {
   try {
@@ -24,15 +40,18 @@ export function parseRemoteUrl(remoteUrl) {
   const value = remoteUrl.trim();
   let host;
   let pathname;
+  let restrictWebHost = false;
 
   const scpMatch = value.match(/^(?:[^@]+@)?([^:]+):(.+)$/);
   if (scpMatch && !value.includes("://")) {
     [, host, pathname] = scpMatch;
+    restrictWebHost = true;
   } else {
     try {
       const parsed = new URL(value);
       host = parsed.hostname;
       pathname = parsed.pathname;
+      restrictWebHost = parsed.protocol.includes("ssh");
     } catch {
       return null;
     }
@@ -48,6 +67,8 @@ export function parseRemoteUrl(remoteUrl) {
     return null;
   }
 
+  const webHost = restrictWebHost ? publicSshHost(host) : host;
+  host = webHost ?? host;
   const repository = segments.at(-1);
   const owner = segments.slice(0, -1).join("/");
 
@@ -56,8 +77,8 @@ export function parseRemoteUrl(remoteUrl) {
     owner,
     repository,
     slug: `${owner}/${repository}`,
-    webUrl: `https://${host}/${owner}/${repository}`,
-    isGitHub: host.toLowerCase() === "github.com",
+    webUrl: webHost ? `https://${webHost}/${owner}/${repository}` : null,
+    isGitHub: webHost?.toLowerCase() === "github.com",
   };
 }
 

@@ -121,7 +121,11 @@ function detectLanguages(files) {
 function detectDemoPath(files) {
   return (
     files
-      .filter((file) => DEMO_EXTENSIONS.has(path.extname(file).toLowerCase()))
+      .filter((file) => {
+        const extension = path.extname(file).toLowerCase();
+        if (!DEMO_EXTENSIONS.has(extension)) return false;
+        return DEMO_WORDS.test(file) || (file.startsWith("assets/") && extension === ".gif");
+      })
       .sort((left, right) => {
         const score = (file) =>
           (file.startsWith("assets/") ? 4 : 0) +

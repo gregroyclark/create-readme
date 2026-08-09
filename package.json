@@ -1,6 +1,6 @@
 {
   "name": "@gregroyclark/create-readme",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "description": "Repo-aware CLI that generates polished README files from facts already in your project.",
   "type": "module",
   "main": "./index.js",
@@ -9,7 +9,7 @@
     "./core": "./src/index.js"
   },
   "bin": {
-    "create-readme": "./bin/create-readme.js"
+    "create-readme": "bin/create-readme.js"
   },
   "files": [
     "bin",

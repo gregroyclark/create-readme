@@ -60,3 +60,17 @@ test("inspectRepository prefers the license file when package metadata conflicts
   assert.equal(facts.license, "MIT");
   assert.equal(facts.licenseConflict, true);
 });
+
+test("inspectRepository does not mistake ordinary application icons for demos", async (context) => {
+  const root = await mkdtemp(path.join(tmpdir(), "create-readme-icons-"));
+  context.after(() => rm(root, { recursive: true, force: true }));
+  await mkdir(path.join(root, "apps", "mobile", "assets", "images"), { recursive: true });
+  await writeFile(path.join(root, "package.json"), JSON.stringify({ name: "fixture" }));
+  await writeFile(
+    path.join(root, "apps", "mobile", "assets", "images", "android-icon-background.png"),
+    "PNG",
+  );
+
+  const facts = await inspectRepository({ root });
+  assert.equal(facts.demoPath, null);
+});

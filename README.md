@@ -6,7 +6,7 @@ A repo-aware CLI that turns facts already in a project into a clean, useful READ
 ![Node.js requirement](https://img.shields.io/badge/node-%3E%3D22.13.0-339933?style=flat-square&logo=node.js&logoColor=white)
 ![MIT license](https://img.shields.io/badge/license-MIT-2563eb?style=flat-square)
 
-> Version 2 is under active development. The CLI works locally; the scoped npm package has not been published yet.
+> Version 2 is available as a public beta and remains under active development.
 
 Website: [createreadme.com](https://createreadme.com)
 
@@ -22,19 +22,9 @@ The original 2020 project asked a short series of questions and wrote the answer
 - Supports deterministic dry-run and CI check modes
 - Generates restrained Shields.io badges from detected facts
 
-## Try it locally
+## Try it
 
 Version 2 currently requires Node.js 22.13 or newer.
-
-```bash
-git clone https://github.com/gregroyclark/create-readme.git
-cd create-readme
-npm install
-npm link
-create-readme --output README.generated.md
-```
-
-After the package is published, the zero-install command will be:
 
 ```bash
 npx @gregroyclark/create-readme
