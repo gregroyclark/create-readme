@@ -57,6 +57,8 @@ function countDetectedFacts(facts) {
     facts.packageName,
     facts.remote,
     facts.languages.length,
+    facts.technologies?.length,
+    facts.deployment,
     facts.runtime,
     facts.license,
     facts.demoPath,
@@ -84,7 +86,14 @@ function showScan(facts, stream, formatter) {
     ["Package", facts.packageName],
     ["Remote", facts.remote?.slug],
     ["Languages", facts.languages.slice(0, 4).map((language) => language.name).join(", ")],
+    ["Technology", facts.technologies?.map((technology) => technology.name).join(", ")],
     ["Runtime", facts.runtime ? `Node.js ${facts.runtime}` : null],
+    [
+      "Deployment",
+      facts.deployment
+        ? `${facts.deployment.provider}${facts.deployment.publishDirectory ? ` → ${facts.deployment.publishDirectory}` : ""}`
+        : null,
+    ],
     ["License", facts.license ?? "Not detected"],
     ["Demo", facts.demoPath],
   ];

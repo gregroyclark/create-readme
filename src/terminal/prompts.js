@@ -8,6 +8,11 @@ const SECTION_LABELS = {
   demo: "Demo",
   installation: "Installation",
   usage: "Usage",
+  commands: "Commands",
+  architecture: "Architecture",
+  "project-structure": "Project structure",
+  testing: "Testing",
+  deployment: "Deployment",
   technology: "Technology",
   contributing: "Contributing",
   license: "License",
@@ -16,6 +21,24 @@ const SECTION_LABELS = {
 
 function required(value) {
   return value.trim() ? true : "Please enter a value.";
+}
+
+export function createSectionChoices(model) {
+  const unavailable = {
+    features: !model.features.length,
+    commands: !model.commands.length,
+    "project-structure": !model.projectStructure.length,
+    testing: !model.testing?.commands?.length,
+    deployment: !model.deployment?.provider || !model.deployment?.configFile,
+    technology: !model.technologies.length && !model.languages.length && !model.runtime,
+  };
+
+  return SECTION_IDS.map((id) => ({
+    name: SECTION_LABELS[id],
+    value: id,
+    checked: !unavailable[id] && model.sections.includes(id),
+    disabled: unavailable[id] ? "not detected; add through readme.config.json" : false,
+  }));
 }
 
 export async function promptForModel(facts, config = {}) {
@@ -34,12 +57,7 @@ export async function promptForModel(facts, config = {}) {
   let sections = await checkbox({
     message: "README sections",
     instructions: "Space to toggle · Enter to continue",
-    choices: SECTION_IDS.map((id) => ({
-      name: SECTION_LABELS[id],
-      value: id,
-      checked: initial.sections.includes(id),
-      disabled: id === "features" && !initial.features.length ? "add through readme.config.json" : false,
-    })),
+    choices: createSectionChoices(initial),
     required: true,
   });
 
@@ -119,6 +137,16 @@ export async function promptForModel(facts, config = {}) {
       default: initial.usageCommand ?? "",
       validate: required,
     });
+  }
+  if (sections.includes("architecture")) {
+    overrides.architecture = {
+      ...(initial.architecture ?? { evidence: [] }),
+      summary: await input({
+        message: "What should a contributor understand about how the major parts fit together?",
+        default: initial.architecture?.summary ?? "",
+        validate: required,
+      }),
+    };
   }
   if (sections.includes("author")) {
     overrides.author = await input({
