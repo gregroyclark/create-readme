@@ -14,7 +14,8 @@ Website: [createreadme.com](https://createreadme.com)
 
 The original 2020 project asked a short series of questions and wrote the answers into `PASTEME.md`. Version 2 keeps that friendly workflow, but starts by inspecting the repository so developers only answer what the code cannot already tell us.
 
-- Detects package metadata, Git remotes, languages, scripts, runtime, license, and demo media
+- Detects package metadata, Git remotes, languages, runtime, license, demo media, and useful package scripts
+- Recognizes common framework and integration evidence, supported deployment configuration, tests, and familiar application paths
 - Asks focused questions instead of presenting a hard-coded technology checklist
 - Produces clean GitHub-flavored Markdown
 - Previews and validates output before an interactive write
@@ -56,10 +57,13 @@ Add `readme.config.json` when the same choices should be reusable locally, in CI
     "demo",
     "installation",
     "usage",
+    "commands",
+    "architecture",
+    "project-structure",
+    "testing",
+    "deployment",
     "technology",
-    "contributing",
-    "license",
-    "author"
+    "license"
   ],
   "features": [
     "Scans the repository before asking questions",
@@ -71,6 +75,38 @@ Add `readme.config.json` when the same choices should be reusable locally, in CI
 ```
 
 Detected values remain the default. Configuration only overrides the choices that should be intentional and repeatable.
+
+For applications, the default README can include evidence-backed `commands`, `architecture`, `project-structure`, `testing`, `deployment`, and `technology` sections. CLI projects can also gain architecture and project-structure sections when the scanner can prove the relationship between the command layer and reusable core modules. Architecture is only inferred from high-confidence source and framework markers; it never invents business-domain details. The generated commands favor a `dev` script over a duplicate legacy `start` alias, and omit maintenance or scaffolding scripts.
+
+The new values are additive and editable in configuration when the detected defaults need refinement:
+
+```json
+{
+  "commands": [
+    { "id": "install", "command": "npm install", "description": "Install dependencies" },
+    { "id": "dev", "command": "npm run dev", "description": "Start the development server" }
+  ],
+  "architecture": {
+    "summary": "Astro owns file-based routing, page documents, and the production build, while React powers interactive components through the Astro React integration.",
+    "evidence": ["astro.config.mjs", "@astrojs/react", "react"]
+  },
+  "projectStructure": [
+    { "path": "src/components", "description": "Reusable UI components" }
+  ],
+  "testing": {
+    "commands": [
+      { "id": "test:e2e", "command": "npm run test:e2e", "description": "Run e2e tests" }
+    ]
+  },
+  "deployment": {
+    "provider": "Netlify",
+    "configFile": "netlify.toml",
+    "publishDirectory": "dist"
+  }
+}
+```
+
+`contributing` is selected automatically only when a CONTRIBUTING file exists. `author` is not inferred from a Git remote; set it explicitly, or use package metadata for a publishable package.
 
 ## Programmatic core
 

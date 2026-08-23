@@ -5,6 +5,11 @@ export const SECTION_IDS = [
   "demo",
   "installation",
   "usage",
+  "commands",
+  "architecture",
+  "project-structure",
+  "testing",
+  "deployment",
   "technology",
   "contributing",
   "license",
@@ -12,16 +17,49 @@ export const SECTION_IDS = [
 ];
 
 function defaultSections(facts, overrides) {
+  const application = facts.projectType === "application";
+  const commands = overrides.commands ?? facts.commands ?? [];
+  const architecture = normalizedArchitecture(overrides.architecture, facts.architecture);
+  const projectStructure = overrides.projectStructure ?? facts.projectStructure ?? [];
+  const testing = overrides.testing ?? facts.testing;
+  const deployment = overrides.deployment ?? facts.deployment;
+  const technologies = overrides.technologies ?? facts.technologies ?? [];
+  const languages = overrides.languages ?? facts.languages ?? [];
+  const author = defaultAuthor(facts, overrides);
   return [
     ...(overrides.features?.length ? ["features"] : []),
     ...(facts.demoPath ? ["demo"] : []),
-    "installation",
-    ...(facts.usageCommand ? ["usage"] : []),
-    ...(facts.languages.length ? ["technology"] : []),
-    "contributing",
+    ...(application && commands.length ? ["commands"] : []),
+    ...(!application ? ["installation"] : []),
+    ...(!application && facts.usageCommand ? ["usage"] : []),
+    ...(architecture ? ["architecture"] : []),
+    ...(projectStructure.length && (application || projectStructure.length >= 2)
+      ? ["project-structure"]
+      : []),
+    ...(application && testing?.commands?.length ? ["testing"] : []),
+    ...(application && deployment ? ["deployment"] : []),
+    ...(technologies.length || languages.length ? ["technology"] : []),
+    ...(overrides.contributingFile ?? facts.contributingFile ? ["contributing"] : []),
     ...(overrides.license ?? facts.license ? ["license"] : []),
-    ...(facts.owner ? ["author"] : []),
+    ...(author ? ["author"] : []),
   ];
+}
+
+function normalizedArchitecture(value, fallback) {
+  if (value === undefined) return fallback ?? null;
+  if (!value) return null;
+  if (typeof value === "string") {
+    return { ...(fallback ?? { evidence: [] }), summary: value.trim() };
+  }
+  const summary = String(value.summary ?? fallback?.summary ?? "").trim();
+  return summary
+    ? { summary, evidence: value.evidence ?? fallback?.evidence ?? [] }
+    : null;
+}
+
+function defaultAuthor(facts, overrides) {
+  if (overrides.author !== undefined) return overrides.author;
+  return !facts.private && ["package", "cli"].includes(facts.projectType) ? facts.packageAuthor ?? null : null;
 }
 
 function normalizedSections(sections) {
@@ -60,12 +98,19 @@ export function createReadmeModel(facts, overrides = {}) {
     demoPath: overrides.demoPath === undefined ? facts.demoPath : overrides.demoPath,
     installCommand: overrides.installCommand ?? facts.installCommand,
     usageCommand: overrides.usageCommand ?? facts.usageCommand,
-    languages: overrides.languages ?? facts.languages.map((language) => language.name),
+    commands: overrides.commands ?? facts.commands ?? [],
+    architecture: normalizedArchitecture(overrides.architecture, facts.architecture),
+    projectStructure: overrides.projectStructure ?? facts.projectStructure ?? [],
+    testing: overrides.testing ?? facts.testing ?? null,
+    deployment: overrides.deployment ?? facts.deployment ?? null,
+    technologies: overrides.technologies ?? facts.technologies ?? [],
+    languages: overrides.languages ?? (facts.languages ?? []).map((language) => language.name),
     license,
     contributingFile: overrides.contributingFile ?? facts.contributingFile,
-    author: overrides.author ?? facts.owner,
+    author: defaultAuthor(facts, overrides),
     repository: facts.repository,
     repositoryUrl: facts.repositoryUrl,
+    owner: facts.owner,
     developmentCommand: facts.developmentCommand,
     testCommand: facts.testCommand,
     runtime: facts.runtime,
@@ -84,6 +129,12 @@ export function configFromModel(model) {
     demoPath: model.demoPath,
     installCommand: model.installCommand,
     usageCommand: model.usageCommand,
+    commands: model.commands,
+    architecture: model.architecture,
+    projectStructure: model.projectStructure,
+    testing: model.testing,
+    deployment: model.deployment,
+    technologies: model.technologies,
     license: model.license,
     author: model.author,
     ...(model.features.length ? { features: model.features } : {}),

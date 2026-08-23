@@ -37,10 +37,14 @@ The inspector may detect:
 - Project and package name
 - Package description and version
 - Package manager and lockfile
-- Development, test, start, and binary commands
+- Normalized install, development, build, preview, validation, test, and binary commands
 - Node.js runtime requirement
 - Git remote, repository owner, repository name, and default branch
 - Source languages by file extension
+- Frameworks, UI libraries, integrations, and test tools from package dependencies
+- High-confidence architecture relationships from configured integrations and source usage
+- Familiar application paths and their likely responsibility
+- Supported deployment configuration and publish directory
 - License identifier and license file
 - Demo images
 - Contributing guide
@@ -56,6 +60,10 @@ The document model combines facts with intentional overrides:
 - Ordered section identifiers
 - Optional features
 - Installation and usage commands
+- Application command table
+- Architecture summary and supporting evidence
+- Project structure
+- Testing commands and deployment details
 - Demo media
 - Technology list
 - License and author
@@ -72,13 +80,33 @@ Supported v2 fields:
 {
   "title": "Project title",
   "description": "One-sentence summary",
-  "sections": ["installation", "usage", "technology", "contributing"],
+  "sections": ["commands", "architecture", "project-structure", "testing", "deployment", "technology"],
   "features": ["First feature"],
   "badges": ["license", "npm-version", "node", "ci"],
   "badgeStyle": "flat-square",
   "demoPath": "assets/demo.gif",
   "installCommand": "npm install",
   "usageCommand": "npm start",
+  "commands": [
+    { "id": "dev", "command": "npm run dev", "description": "Start the development server" }
+  ],
+  "architecture": {
+    "summary": "Astro owns routing and the production build, while React powers interactive components.",
+    "evidence": ["astro.config.mjs", "src/pages/index.astro"]
+  },
+  "projectStructure": [
+    { "path": "src/components", "description": "Reusable UI components" }
+  ],
+  "testing": {
+    "commands": [
+      { "id": "test:e2e", "command": "npm run test:e2e", "description": "Run end-to-end tests" }
+    ]
+  },
+  "deployment": {
+    "provider": "Netlify",
+    "configFile": "netlify.toml",
+    "publishDirectory": "dist"
+  },
   "license": "MIT",
   "author": "github-user"
 }
