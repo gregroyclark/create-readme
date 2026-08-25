@@ -1,0 +1,236 @@
+name: Publish npm package
+
+on:
+  repository_dispatch:
+    types: [npm-release]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-publish-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  validate-and-pack:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      artifact_id: ${{ steps.artifact-id.outputs.artifact_id }}
+      filename: ${{ steps.pack.outputs.filename }}
+      integrity: ${{ steps.pack.outputs.integrity }}
+      package_name: ${{ steps.payload.outputs.package_name }}
+      npm_tag: ${{ steps.payload.outputs.npm_tag }}
+      release_sha: ${{ steps.payload.outputs.release_sha }}
+      release_tag: ${{ steps.payload.outputs.release_tag }}
+      sha512: ${{ steps.pack.outputs.sha512 }}
+      version: ${{ steps.payload.outputs.version }}
+    env:
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - id: payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_EVENT_NAME" = "repository_dispatch"
+          test "$GITHUB_REPOSITORY" = "gregroyclark/create-readme"
+          test "$GITHUB_REF" = "refs/heads/master"
+          test "$DEFAULT_BRANCH" = "master"
+          node .github/scripts/release-helpers.mjs assert-dispatch-payload "$GITHUB_EVENT_PATH" > release-request.json
+          node --input-type=module -e '
+            import { appendFile, readFile } from "node:fs/promises";
+            const request = JSON.parse(await readFile("release-request.json", "utf8"));
+            await appendFile(process.env.GITHUB_OUTPUT, Object.entries(request).map(([key, value]) => key + "=" + value).join("\n") + "\n");
+          '
+      - name: Bind untrusted dispatch to the release commit
+        env:
+          RELEASE_SHA: ${{ steps.payload.outputs.release_sha }}
+          RELEASE_TAG: ${{ steps.payload.outputs.release_tag }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin master --tags
+          test "$GITHUB_SHA" = "$(git rev-parse HEAD)"
+          test "$GITHUB_SHA" = "$(git rev-parse origin/master)"
+          test "$GITHUB_SHA" = "$RELEASE_SHA"
+          test "$(git cat-file -t "refs/tags/$RELEASE_TAG")" = "tag"
+          test "$(git rev-parse "refs/tags/$RELEASE_TAG^{}")" = "$RELEASE_SHA"
+      - name: Validate release metadata and test
+        env:
+          PACKAGE_NAME: ${{ steps.payload.outputs.package_name }}
+          VERSION: ${{ steps.payload.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node .github/scripts/release-helpers.mjs assert-release-metadata package.json package-lock.json release-request.json
+          npm install --global npm@11.17.0 --ignore-scripts --registry=https://registry.npmjs.org
+          npm ci --ignore-scripts --registry=https://registry.npmjs.org
+          npm test
+          npm audit --omit=dev --registry=https://registry.npmjs.org
+          test "$PACKAGE_NAME" = "$(node --input-type=module -e 'import manifest from "./package.json" with { type: "json" }; process.stdout.write(manifest.name)')"
+          test "$VERSION" = "$(node --input-type=module -e 'import manifest from "./package.json" with { type: "json" }; process.stdout.write(manifest.version)')"
+      - id: pack
+        env:
+          PACKAGE_NAME: ${{ steps.payload.outputs.package_name }}
+          VERSION: ${{ steps.payload.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm pack --json --ignore-scripts > npm-pack.json
+          node .github/scripts/release-helpers.mjs assert-packed-artifact npm-pack.json "$PACKAGE_NAME" "$VERSION" . > packed.json
+          node --input-type=module -e '
+            import { appendFile, readFile } from "node:fs/promises";
+            const packed = JSON.parse(await readFile("packed.json", "utf8"));
+            await appendFile(process.env.GITHUB_OUTPUT, ["filename", "integrity", "sha512"].map((key) => key + "=" + packed[key]).join("\n") + "\n");
+          '
+      - id: artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: npm-package-${{ steps.payload.outputs.release_sha }}
+          path: ./${{ steps.pack.outputs.filename }}
+          if-no-files-found: error
+      - id: artifact-id
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARTIFACT_ID="${{ steps.artifact.outputs.artifact-id }}"
+          node .github/scripts/release-helpers.mjs assert-artifact-id "$ARTIFACT_ID" | sed 's/^/artifact_id=/' >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: validate-and-pack
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      ARTIFACT_ID: ${{ needs.validate-and-pack.outputs.artifact_id }}
+      FILENAME: ${{ needs.validate-and-pack.outputs.filename }}
+      INTEGRITY: ${{ needs.validate-and-pack.outputs.integrity }}
+      NPM_TAG: ${{ needs.validate-and-pack.outputs.npm_tag }}
+      PACKAGE_NAME: ${{ needs.validate-and-pack.outputs.package_name }}
+      RELEASE_SHA: ${{ needs.validate-and-pack.outputs.release_sha }}
+      SHA512: ${{ needs.validate-and-pack.outputs.sha512 }}
+      VERSION: ${{ needs.validate-and-pack.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ needs.validate-and-pack.outputs.release_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          artifact-ids: ${{ needs.validate-and-pack.outputs.artifact_id }}
+          path: release-artifact
+      - shell: bash
+        run: |
+          set -euo pipefail
+          HELPER="$GITHUB_WORKSPACE/.github/scripts/release-helpers.mjs"
+          RUN_ATTEMPT="$(node "$HELPER" assert-run-attempt "$GITHUB_RUN_ATTEMPT")"
+          node "$HELPER" assert-artifact-id "$ARTIFACT_ID"
+          node "$HELPER" assert-downloaded-artifact release-artifact "$FILENAME" "$INTEGRITY" "$SHA512"
+          npm install --global npm@11.17.0 --ignore-scripts --registry=https://registry.npmjs.org
+
+          if npm view "$PACKAGE_NAME@$VERSION" --json --registry=https://registry.npmjs.org > registry-version.json 2> registry-view-error.log; then
+            if [ "$RUN_ATTEMPT" -eq 1 ]; then
+              echo "npm already contains $PACKAGE_NAME@$VERSION on publisher attempt 1." >&2
+              exit 1
+            fi
+            npm view "$PACKAGE_NAME" dist-tags --json --registry=https://registry.npmjs.org > dist-tags.json
+            node "$HELPER" assert-registry-version registry-version.json "$PACKAGE_NAME" "$VERSION" "$INTEGRITY"
+            node "$HELPER" assert-registry-dist-tag dist-tags.json "$NPM_TAG" "$VERSION"
+            TEMP_PROJECT="$(mktemp -d)"
+            trap 'rm -rf "$TEMP_PROJECT"' EXIT
+            (
+              cd "$TEMP_PROJECT"
+              npm init --yes >/dev/null
+              npm install --ignore-scripts --save-exact --registry=https://registry.npmjs.org "$PACKAGE_NAME@$VERSION"
+              npm audit signatures --json --include-attestations --registry=https://registry.npmjs.org > verified-audit.json
+              node --input-type=module -e '
+                import { writeFile } from "node:fs/promises";
+                await writeFile("identity.json", JSON.stringify({
+                  package_name: process.env.PACKAGE_NAME, version: process.env.VERSION,
+                  integrity: process.env.INTEGRITY, release_sha: process.env.RELEASE_SHA,
+                  repository: process.env.GITHUB_REPOSITORY, run_id: process.env.GITHUB_RUN_ID,
+                  run_attempt: process.env.GITHUB_RUN_ATTEMPT,
+                }));
+              '
+              node "$HELPER" assert-verified-provenance verified-audit.json identity.json
+            )
+            echo "Recovered an already-published package from an earlier attempt of this workflow run."
+            exit 0
+          fi
+
+          node "$HELPER" assert-registry-absent registry-view-error.log
+          cd release-artifact
+          npm publish "./$FILENAME" --ignore-scripts --access public --tag "$NPM_TAG" --provenance --registry=https://registry.npmjs.org
+
+  verify:
+    needs: [validate-and-pack, publish]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      INTEGRITY: ${{ needs.validate-and-pack.outputs.integrity }}
+      NPM_TAG: ${{ needs.validate-and-pack.outputs.npm_tag }}
+      PACKAGE_NAME: ${{ needs.validate-and-pack.outputs.package_name }}
+      RELEASE_SHA: ${{ needs.validate-and-pack.outputs.release_sha }}
+      VERSION: ${{ needs.validate-and-pack.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ needs.validate-and-pack.outputs.release_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - shell: bash
+        run: |
+          set -euo pipefail
+          HELPER="$GITHUB_WORKSPACE/.github/scripts/release-helpers.mjs"
+          npm install --global npm@11.17.0 --ignore-scripts --registry=https://registry.npmjs.org
+          for attempt in 1 2 3 4 5 6; do
+            if npm view "$PACKAGE_NAME@$VERSION" --json --registry=https://registry.npmjs.org > registry-version.json 2> registry-view-error.log; then
+              npm view "$PACKAGE_NAME" dist-tags --json --registry=https://registry.npmjs.org > dist-tags.json
+              node "$HELPER" assert-registry-version registry-version.json "$PACKAGE_NAME" "$VERSION" "$INTEGRITY"
+              node "$HELPER" assert-registry-dist-tag dist-tags.json "$NPM_TAG" "$VERSION"
+              TEMP_PROJECT="$(mktemp -d)"
+              trap 'rm -rf "$TEMP_PROJECT"' EXIT
+              (
+                cd "$TEMP_PROJECT"
+                npm init --yes >/dev/null
+                npm install --ignore-scripts --save-exact --registry=https://registry.npmjs.org "$PACKAGE_NAME@$VERSION"
+                npm audit signatures --json --include-attestations --registry=https://registry.npmjs.org > verified-audit.json
+                node --input-type=module -e '
+                  import { writeFile } from "node:fs/promises";
+                  await writeFile("identity.json", JSON.stringify({
+                    package_name: process.env.PACKAGE_NAME, version: process.env.VERSION,
+                    integrity: process.env.INTEGRITY, release_sha: process.env.RELEASE_SHA,
+                    repository: process.env.GITHUB_REPOSITORY, run_id: process.env.GITHUB_RUN_ID,
+                    run_attempt: process.env.GITHUB_RUN_ATTEMPT,
+                  }));
+                '
+                node "$HELPER" assert-verified-provenance verified-audit.json identity.json
+              )
+              exit 0
+            fi
+            node "$HELPER" assert-registry-absent registry-view-error.log
+            if [ "$attempt" -lt 6 ]; then sleep "$((attempt * 5))"; fi
+          done
+          echo "npm registry did not propagate the release in time." >&2
+          exit 1

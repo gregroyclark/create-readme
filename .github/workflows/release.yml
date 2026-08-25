@@ -1,0 +1,181 @@
+name: Release to npm
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Canonical SemVer version to publish
+        required: true
+        type: string
+      npm_tag:
+        description: npm dist-tag
+        required: true
+        default: beta
+        type: choice
+        options: [beta, latest]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-release-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    outputs:
+      package_name: ${{ steps.release.outputs.package_name }}
+      release_tag: ${{ steps.release.outputs.release_tag }}
+      source_sha: ${{ steps.release.outputs.source_sha }}
+      version: ${{ steps.release.outputs.version }}
+      npm_tag: ${{ steps.release.outputs.npm_tag }}
+    env:
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      NPM_TAG: ${{ inputs.npm_tag }}
+      VERSION: ${{ inputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = "gregroyclark/create-readme"
+          test "$GITHUB_REF" = "refs/heads/master"
+          test "$DEFAULT_BRANCH" = "master"
+          RELEASE_TAG="$(node .github/scripts/release-helpers.mjs validate-release-input "$VERSION" "$NPM_TAG")"
+          node .github/scripts/release-helpers.mjs assert-package-lock package.json package-lock.json
+          CURRENT_VERSION="$(node --input-type=module -e 'import manifest from "./package.json" with { type: "json" }; process.stdout.write(manifest.version)')"
+          PACKAGE_NAME="$(node --input-type=module -e 'import manifest from "./package.json" with { type: "json" }; process.stdout.write(manifest.name)')"
+          test "$PACKAGE_NAME" = "@gregroyclark/create-readme"
+          node .github/scripts/release-helpers.mjs assert-version-increase "$CURRENT_VERSION" "$VERSION"
+          git fetch origin master --tags
+          test "$GITHUB_SHA" = "$(git rev-parse origin/master)"
+          if git ls-remote --exit-code --tags origin "refs/tags/$RELEASE_TAG" >/dev/null 2>&1; then exit 1; fi
+          if npm view "$PACKAGE_NAME@$VERSION" version --json --registry=https://registry.npmjs.org >/dev/null 2>npm-view-error.log; then
+            echo "npm already contains $PACKAGE_NAME@$VERSION." >&2; exit 1
+          else
+            node .github/scripts/release-helpers.mjs assert-registry-absent npm-view-error.log
+          fi
+          {
+            echo "package_name=$PACKAGE_NAME"
+            echo "release_tag=$RELEASE_TAG"
+            echo "source_sha=$GITHUB_SHA"
+            echo "version=$VERSION"
+            echo "npm_tag=$NPM_TAG"
+          } >> "$GITHUB_OUTPUT"
+
+  test:
+    name: Test (${{ matrix.os }}, Node ${{ matrix.node }})
+    needs: preflight
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: [22.13.0, 24]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ needs.preflight.outputs.source_sha }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  prepare:
+    needs: [preflight, test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      release_sha: ${{ steps.commit.outputs.release_sha }}
+    env:
+      NPM_TAG: ${{ needs.preflight.outputs.npm_tag }}
+      PACKAGE_NAME: ${{ needs.preflight.outputs.package_name }}
+      RELEASE_TAG: ${{ needs.preflight.outputs.release_tag }}
+      SOURCE_SHA: ${{ needs.preflight.outputs.source_sha }}
+      VERSION: ${{ needs.preflight.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ needs.preflight.outputs.source_sha }}
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - id: commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          node .github/scripts/release-helpers.mjs validate-release-input "$VERSION" "$NPM_TAG"
+          node .github/scripts/release-helpers.mjs assert-package-lock package.json package-lock.json
+          CURRENT_VERSION="$(node --input-type=module -e 'import manifest from "./package.json" with { type: "json" }; process.stdout.write(manifest.version)')"
+          node .github/scripts/release-helpers.mjs assert-version-increase "$CURRENT_VERSION" "$VERSION"
+          git fetch origin master --tags
+          test "$SOURCE_SHA" = "$(git rev-parse HEAD)"
+          test "$SOURCE_SHA" = "$(git rev-parse origin/master)"
+          if git ls-remote --exit-code --tags origin "refs/tags/$RELEASE_TAG" >/dev/null 2>&1; then exit 1; fi
+          if npm view "$PACKAGE_NAME@$VERSION" version --json --registry=https://registry.npmjs.org >/dev/null 2>npm-view-error.log; then
+            echo "npm already contains $PACKAGE_NAME@$VERSION." >&2; exit 1
+          else
+            node .github/scripts/release-helpers.mjs assert-registry-absent npm-view-error.log
+          fi
+          npm version "$VERSION" --no-git-tag-version --ignore-scripts
+          test "$(git diff --name-only)" = $'package-lock.json\npackage.json'
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git commit -m "chore(release): $RELEASE_TAG"
+          git tag -a "$RELEASE_TAG" -m "Release $RELEASE_TAG"
+          git push --atomic origin "HEAD:refs/heads/master" "refs/tags/$RELEASE_TAG:refs/tags/$RELEASE_TAG"
+          echo "release_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  dispatch:
+    needs: [preflight, prepare]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      PACKAGE_NAME: ${{ needs.preflight.outputs.package_name }}
+      VERSION: ${{ needs.preflight.outputs.version }}
+      NPM_TAG: ${{ needs.preflight.outputs.npm_tag }}
+      RELEASE_TAG: ${{ needs.preflight.outputs.release_tag }}
+      RELEASE_SHA: ${{ needs.prepare.outputs.release_sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ needs.prepare.outputs.release_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module -e '
+            import { writeFile } from "node:fs/promises";
+            import { assertDispatchPayload } from "./.github/scripts/release-helpers.mjs";
+            const client_payload = assertDispatchPayload({
+              package_name: process.env.PACKAGE_NAME, version: process.env.VERSION,
+              npm_tag: process.env.NPM_TAG, release_tag: process.env.RELEASE_TAG,
+              release_sha: process.env.RELEASE_SHA, coordinator_run_id: process.env.GITHUB_RUN_ID,
+              coordinator_run_attempt: process.env.GITHUB_RUN_ATTEMPT,
+            });
+            await writeFile("dispatch.json", JSON.stringify({ event_type: "npm-release", client_payload }));
+          '
+          curl --fail-with-body --request POST --header "Accept: application/vnd.github+json" \
+            --header "Authorization: Bearer $GITHUB_TOKEN" --header "Content-Type: application/json" \
+            --header "X-GitHub-Api-Version: 2022-11-28" \
+            --data-binary @dispatch.json "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/dispatches"
