@@ -154,6 +154,36 @@ npm run site:dev
 npm run site:check
 ```
 
+## CI and npm releases
+
+Every push and pull request targeting `master` runs the Node.js test suite on Ubuntu, macOS, and Windows with Node 22.13.0 and Node 24. The production dependency audit runs once on Ubuntu with Node 24.
+
+Maintainers publish from **Actions → Release to npm → Run workflow** while `master` is selected. Enter one canonical SemVer version (for example, `2.0.0-beta.4` or `2.0.0`) and choose the only valid tag:
+
+- Prereleases use `beta`.
+- Stable releases use `latest`.
+
+`release.yml` is the manual coordinator: it validates the request, reruns the full test matrix, commits the package and lockfile version directly to `master`, creates its matching annotated `v<version>` tag, and atomically pushes both. It then sends the new release commit to `publish.yml`, the npm trusted-publisher workflow. The publisher validates that the dispatch, default branch, checked-out commit, `origin/master`, and annotated tag all name that same release commit before it packs and publishes the exact validated tarball.
+
+The npm package is [@gregroyclark/create-readme](https://www.npmjs.com/package/@gregroyclark/create-readme); its GitHub repository is `gregroyclark/create-readme`. The workflows do not create a GitHub Release, alter a dist-tag after publishing, or deploy the website.
+
+One-time maintainer setup is required before the first release:
+
+- Allow the repository workflow token to fast-forward `master` and create tags; keep branch rules compatible with that direct release commit.
+- Create a GitHub environment named `npm`, restrict it to `master`, and do not require reviewers if releases should remain one-action.
+- In npm, configure trusted publishing for package `@gregroyclark/create-readme` from GitHub repository `gregroyclark/create-readme`, workflow filename `publish.yml`, environment `npm`, and the `npm publish` action.
+- Do not add an npm token or npm secret. Publication uses the workflow's OIDC identity only.
+- Keep the repository public: npm provenance requires a public source repository.
+
+Git and npm cannot be atomic together. Recovery is deliberately narrow:
+
+- If the release commit and tag were pushed but dispatch failed, use **Re-run failed jobs** on that same coordinator run so only its dispatch job is retried. Do not start a new release run for the same version.
+- If publication is ambiguous, rerun the same failed publisher workflow run. Its first attempt rejects any pre-existing version; a later attempt accepts one only after npm cryptographically verifies matching signed provenance for this exact publisher run.
+- If only verification fails because npm has not propagated yet, rerun only verification. It does not publish again.
+- Integrity, selected tag, provenance, source identity, or workflow-policy mismatches are terminal and require investigation.
+
+There is one intentional fail-closed race: if `master` advances between the atomic release push and the repository dispatch, the publisher rejects the release because the default-branch SHA is no longer the release commit. Do not repair that state by re-dispatching, moving tags, force-pushing, unpublishing, or editing dist-tags.
+
 ## The original
 
 This was one of my first JavaScript projects. The original terminal demo is staying in the repository as part of that history:

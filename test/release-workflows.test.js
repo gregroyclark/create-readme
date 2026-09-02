@@ -3,14 +3,12 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const root = new URL("../", import.meta.url);
-const release = await readFile(
-  new URL(".github/workflows/release.yml", root),
-  "utf8",
-);
-const publish = await readFile(
-  new URL(".github/workflows/publish.yml", root),
-  "utf8",
-);
+const release = (
+  await readFile(new URL(".github/workflows/release.yml", root), "utf8")
+).replaceAll("\r\n", "\n");
+const publish = (
+  await readFile(new URL(".github/workflows/publish.yml", root), "utf8")
+).replaceAll("\r\n", "\n");
 const checkout = "3d3c42e5aac5ba805825da76410c181273ba90b1";
 const setupNode = "820762786026740c76f36085b0efc47a31fe5020";
 
