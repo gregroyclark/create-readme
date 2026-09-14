@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>create-readme · Local Studio</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body>
+<a class="skip" href="#document">Skip to README preview</a>
+<header class="masthead"><div class="brand">create-readme <span>studio</span></div><div id="repository" class="repository">Opening repository…</div><div class="local">Local · Read-only</div></header>
+<div class="workspace">
+  <aside class="inspector" aria-label="Repository facts">
+    <div class="inspector-heading"><h1>Repository facts</h1><p id="scan-summary">Scanning repository…</p></div>
+    <dl id="facts"></dl>
+    <div class="scan-notes"><p id="scan-time"></p><p id="config"></p><button id="refresh" type="button">Rescan repository</button></div>
+  </aside>
+  <main id="document" tabindex="-1">
+    <div class="preview-heading"><div><h2>README preview</h2><p>Generated from current repository facts</p></div>
+      <div class="tabs" role="tablist" aria-label="Preview format"><button role="tab" id="rendered-tab" aria-selected="true" aria-controls="rendered">Rendered</button><button role="tab" id="markdown-tab" aria-selected="false" aria-controls="markdown" tabindex="-1">Markdown</button></div>
+    </div>
+    <div id="error" role="alert" hidden></div>
+    <div id="loading" role="status">Reading your repository and preparing the document…</div>
+    <article id="rendered" class="readme" role="tabpanel" aria-labelledby="rendered-tab" tabindex="0" hidden></article>
+    <div id="markdown" role="tabpanel" aria-labelledby="markdown-tab" tabindex="0" hidden><pre><code id="source"></code></pre></div>
+    <details id="diagnostics" hidden><summary id="diagnostic-summary">Review notes</summary><ul id="messages"></ul></details>
+    <p class="media-note" id="media-note" hidden>Images and badges are listed by label. Remote media stays unloaded in this local preview.</p>
+  </main>
+</div>
+<footer><span id="status" role="status">Preparing preview</span><span>No files have been changed</span></footer>
+</body></html>

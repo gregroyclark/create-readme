@@ -51,7 +51,8 @@
   "author": "Greg Clark",
   "license": "MIT",
   "dependencies": {
-    "@inquirer/prompts": "^8.5.2"
+    "@inquirer/prompts": "^8.5.2",
+    "markdown-it": "^15.0.2"
   },
   "devDependencies": {
     "wrangler": "^4.120.0"

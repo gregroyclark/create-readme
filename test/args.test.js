@@ -35,5 +35,18 @@ test("parseCliArgs handles automation and output flags", () => {
 });
 
 test("parseCliArgs rejects unknown commands", () => {
-  assert.throws(() => parseCliArgs(["studio"]), /Unknown command: studio/);
+  assert.throws(() => parseCliArgs(["unknown"]), /Unknown command: unknown/);
+});
+
+test("Studio accepts local preview options and rejects writes and invalid ports", () => {
+  assert.equal(parseCliArgs(["studio", "--no-open", "--port", "4567"]).port, 4567);
+  assert.equal(parseCliArgs(["studio", "--no-open"]).open, false);
+  assert.equal(parseCliArgs(["studio"]).port, 0);
+  for (const port of ["-1", "65536", "NaN", "2.5"]) {
+    assert.throws(() => parseCliArgs(["studio", "--port", port]), /port/);
+  }
+  for (const flag of ["--force", "--yes", "--save-config", "--check", "--dry-run"]) {
+    assert.throws(() => parseCliArgs(["studio", flag]), /read-only/);
+  }
+  assert.throws(() => parseCliArgs(["--port", "1234"]), /require the studio command/);
 });

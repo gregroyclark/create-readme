@@ -4,6 +4,14 @@
 
 Create a strong README with less typing by detecting what the repository already knows, asking only for missing context, and making every write reviewable.
 
+## Local Studio first slice (September 2026)
+
+The approved visual direction uses Document Desk: a left repository-facts inspector and a large rendered document, with a dark Markdown view available from a tab. The original visual composer remains the destination for later authoring; the Proof Sheet evidence panel is a future extension, not part of this slice.
+
+`create-readme studio` serves the current repository through a loopback-only, read-only server. It honors saved config and supports manual rescan, rendering, Markdown source, validation messages, and responsive layouts. The web surface lives under `src/studio/public` and is packaged with the CLI. `src/studio/data.js` adapts existing core output; it does not duplicate repository detection or README generation. Markdown-it renders the preview with raw HTML disabled and images omitted. No cloud service, external media requests, editing, writes, or GitHub Action is included.
+
+Visual tokens follow the existing product: off-white `#fbfaf6`, ink `#0d1117`, muted `#566070`, lime active-state accents, cobalt focus/links, system sans-serif text and system monospace metadata. Target: understand repository facts and inspect the generated README within ten seconds.
+
 ## Product principles
 
 1. **Local first.** The core experience works without an account, token, hosted service, or AI provider.
@@ -138,7 +146,7 @@ Automation modes must not mix informational logs into Markdown output.
 
 ## Surface 2: local Studio
 
-The Studio will be launched from the same package, likely through `create-readme studio`. It should:
+The read-only first slice launches with `create-readme studio`. The eventual authoring surface should:
 
 - Run only on the local machine by default
 - Display detected facts as editable suggestions

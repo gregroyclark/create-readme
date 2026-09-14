@@ -10,6 +10,22 @@ A repo-aware CLI that turns facts already in a project into a clean, useful READ
 
 Website: [createreadme.com](https://createreadme.com)
 
+## Local Studio
+
+From the repository you want to inspect, run the local checkout's CLI:
+
+```sh
+node /path/to/create-readme/bin/create-readme.js studio
+```
+
+Studio opens a local browser workspace with detected repository facts, a rendered README preview, and a Markdown tab. It uses the same scanner, saved configuration, document model, renderer, and validator as the terminal tool. **Rescan repository** refreshes the preview after local changes.
+
+Use `studio --no-open` to open the printed URL yourself, `--port 4317` to select a port, or `--config path/to/config.json` to select saved choices. The default port is selected automatically. Keep the full URL, including its session fragment. Press Ctrl+C in the terminal to stop Studio.
+
+This first Studio version is read-only: it does not edit, reorder, or write README files or configuration. The preview supports Markdown tables, code, and links; raw HTML is escaped, and images/badges are shown as labels to avoid loading local files or external media. The Markdown tab preserves the original generated output. Relative file links are not served by Studio. This is not a full GitHub renderer.
+
+The server listens only on `127.0.0.1`, restricts routes to its bundled interface and preview API, and requires a per-session token for repository data. This feature is in the local source checkout; it has not yet been published to npm.
+
 ## Why this exists
 
 The original 2020 project asked a short series of questions and wrote the answers into `PASTEME.md`. Version 2 keeps that friendly workflow, but starts by inspecting the repository so developers only answer what the code cannot already tell us.
@@ -46,7 +62,7 @@ Run `create-readme --help` for every option. Non-interactive generation never ov
 
 ## Configuration
 
-Add `readme.config.json` when the same choices should be reusable locally, in CI, and eventually in the visual Studio and GitHub Action.
+Add `readme.config.json` when the same choices should be reusable in the CLI, Local Studio, CI, and eventually the GitHub Action.
 
 ```json
 {
@@ -131,7 +147,7 @@ const validation = await validateReadme(markdown, { root: process.cwd() });
 The terminal is the first surface over a shared engine:
 
 1. **Terminal CLI** — fast, local README creation for everyday use
-2. **Local Studio** — visual section editing, badge styling, and live preview
+2. **Local Studio** — read-only preview in the local checkout; section editing and badge styling planned
 3. **GitHub Action** — reviewable README maintenance through pull requests
 
 See [the v2 product and technical specification](docs/v2-spec.md) for the boundaries between those surfaces.
