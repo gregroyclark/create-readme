@@ -4,11 +4,11 @@
 
 Create a strong README with less typing by detecting what the repository already knows, asking only for missing context, and making every write reviewable.
 
-## Local Studio first slice (September 2026)
+## Local Studio authoring slice (September 2026)
 
-The approved visual direction uses Document Desk: a left repository-facts inspector and a large rendered document, with a dark Markdown view available from a tab. The original visual composer remains the destination for later authoring; the Proof Sheet evidence panel is a future extension, not part of this slice.
+The approved visual direction combines Composer, Document Desk, and Proof Sheet: intentional choices beside a large rendered document, Markdown source, and evidence/review inspection.
 
-`create-readme studio` serves the current repository through a loopback-only, read-only server. It honors saved config and supports manual rescan, rendering, Markdown source, validation messages, and responsive layouts. The web surface lives under `src/studio/public` and is packaged with the CLI. `src/studio/data.js` adapts existing core output; it does not duplicate repository detection or README generation. Markdown-it renders the preview with raw HTML disabled and images omitted. No cloud service, external media requests, editing, writes, or GitHub Action is included.
+`create-readme studio` serves the current repository through a loopback-only server. It honors saved config and supports explicit overrides, reset-to-detected controls, section enablement/order, supported content editing, badge candidates and styles, manual rescan, rendered and Markdown views, evidence, validation messages, and a full before/after review. Rescan retains a dirty draft. Separate, explicitly confirmed actions save `readme.config.json` or replace the repository-root `README.md`; neither happens during editing or preview. Reviews carry target revisions and a repository snapshot, so stale files or changed repository facts are refused. The `--config` target must remain inside the launched root and symlink targets are rejected. The web surface lives under `src/studio/public` and is packaged with the CLI. `src/studio/data.js` adapts existing core output; it does not duplicate repository detection or README generation. Markdown-it renders the preview with raw HTML disabled and images omitted. No cloud service or external media requests are required. GitHub Action integration remains future work.
 
 Visual tokens follow the existing product: off-white `#fbfaf6`, ink `#0d1117`, muted `#566070`, lime active-state accents, cobalt focus/links, system sans-serif text and system monospace metadata. Target: understand repository facts and inspect the generated README within ten seconds.
 
@@ -120,7 +120,7 @@ Supported v2 fields:
 }
 ```
 
-Unknown fields are ignored for forward compatibility. A future schema version may add explicit migrations if incompatible changes become necessary.
+Unknown fields are preserved by Studio config saves and ignored by the current model for forward compatibility. A future schema version may add explicit migrations if incompatible changes become necessary.
 
 ## Surface 1: terminal CLI
 
@@ -146,15 +146,17 @@ Automation modes must not mix informational logs into Markdown output.
 
 ## Surface 2: local Studio
 
-The read-only first slice launches with `create-readme studio`. The eventual authoring surface should:
+The authoring slice launches with `create-readme studio` and:
 
 - Run only on the local machine by default
 - Display detected facts as editable suggestions
 - Enable, disable, and reorder sections
 - Compare curated badge styles
-- Render a GitHub-flavored preview beside the editor
-- Show validation findings and the final file diff
-- Persist through the same configuration schema
+- Render a Markdown preview beside the editor, with Rendered and Markdown views
+- Show detected evidence, validation findings, and the complete before/after replacement
+- Save config and README separately, each after explicit confirmation
+- Refuse stale target revisions, stale reviews, unsafe paths, and invalid README writes
+- Keep edits in memory until save; rescan retains dirty draft choices
 
 The Studio must import the core package. It must not grow a separate scanner or renderer.
 
@@ -193,7 +195,7 @@ The first v2 milestone includes:
 - Public programmatic exports
 - Automated tests and dependency audit
 
-It intentionally excludes the Studio UI, GitHub Action packaging, hosted services, AI copy generation, and automatic license-file creation.
+It intentionally excludes GitHub Action packaging, hosted services, AI copy generation, automatic license-file creation, and GitHub-renderer parity. Studio authoring is local-only and does not imply a deployed or published service.
 
 ## Release gates
 

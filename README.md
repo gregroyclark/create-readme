@@ -18,11 +18,13 @@ From the repository you want to inspect, run the local checkout's CLI:
 node /path/to/create-readme/bin/create-readme.js studio
 ```
 
-Studio opens a local browser workspace with detected repository facts, a rendered README preview, and a Markdown tab. It uses the same scanner, saved configuration, document model, renderer, and validator as the terminal tool. **Rescan repository** refreshes the preview after local changes.
+Studio opens a local browser workspace with detected repository facts, explicit overrides, a rendered README preview, and a Markdown tab. It uses the same scanner, saved configuration, document model, renderer, and validator as the terminal tool. **Rescan repository** refreshes repository facts while retaining an unsaved draft.
 
-Use `studio --no-open` to open the printed URL yourself, `--port 4317` to select a port, or `--config path/to/config.json` to select saved choices. The default port is selected automatically. Keep the full URL, including its session fragment. Press Ctrl+C in the terminal to stop Studio.
+Use `studio --no-open` to open the printed URL yourself, `--port 4317` to select a port, or `--config path/to/config.json` to select saved choices. Studio accepts a config path only when it remains inside the launched repository root. The default port is selected automatically. Keep the full URL, including its session fragment. Press Ctrl+C in the terminal to stop Studio.
 
-This first Studio version is read-only: it does not edit, reorder, or write README files or configuration. The preview supports Markdown tables, code, and links; raw HTML is escaped, and images/badges are shown as labels to avoid loading local files or external media. The Markdown tab preserves the original generated output. Relative file links are not served by Studio. This is not a full GitHub renderer.
+Studio is a local authoring workspace. Edit title, description, features, supported section content, section enablement/order (with accessible Up/Down controls), badges, and badge style; use **Use detected value** or **Reset all to detected** to remove intentional overrides. Rendered and Markdown views use the shared generation pipeline. The Evidence view distinguishes detected facts from saved choices and shows architecture evidence. Badge styles are compared by descriptions and generated URLs; no remote artwork is fetched.
+
+**Review & save** shows the full before/after README replacement and a separate configuration comparison. Saving config writes only `readme.config.json`; writing README replaces only the repository-root `README.md`. Each action requires its own explicit confirmation. Draft edits are not persisted until a save succeeds, and stale files or a changed repository invalidate the review instead of overwriting newer work. The preview escapes raw HTML, omits images, and does not serve relative file links; this is not a full GitHub renderer.
 
 The server listens only on `127.0.0.1`, restricts routes to its bundled interface and preview API, and requires a per-session token for repository data. This feature is in the local source checkout; it has not yet been published to npm.
 
@@ -62,7 +64,7 @@ Run `create-readme --help` for every option. Non-interactive generation never ov
 
 ## Configuration
 
-Add `readme.config.json` when the same choices should be reusable in the CLI, Local Studio, CI, and eventually the GitHub Action.
+Add `readme.config.json` when the same choices should be reusable in the CLI, Local Studio, and CI. Studio preserves unknown config fields when saving.
 
 ```json
 {
@@ -147,7 +149,7 @@ const validation = await validateReadme(markdown, { root: process.cwd() });
 The terminal is the first surface over a shared engine:
 
 1. **Terminal CLI** — fast, local README creation for everyday use
-2. **Local Studio** — read-only preview in the local checkout; section editing and badge styling planned
+2. **Local Studio** — local authoring, evidence, review, and explicitly confirmed config/README saves
 3. **GitHub Action** — reviewable README maintenance through pull requests
 
 See [the v2 product and technical specification](docs/v2-spec.md) for the boundaries between those surfaces.
@@ -161,7 +163,7 @@ npm run test:coverage
 npm run check
 ```
 
-The test suite uses Node's built-in test runner and covers remote parsing, repository inspection, model overrides, badge rendering, Markdown validation, CLI flags, safe writes, and CI checks.
+The test suite uses Node's built-in test runner and covers remote parsing, repository inspection, model overrides, badge rendering, Markdown validation, CLI flags, Studio authoring and conflict handling, safe writes, and CI checks.
 
 The website is a dependency-light static build served by Cloudflare Pages:
 

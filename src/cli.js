@@ -23,7 +23,7 @@ Usage:
   create-readme [options]
   create-readme studio [--port <number>] [--no-open] [--config <path>]
 
-Studio opens a local, read-only README preview. Press Ctrl+C to stop.
+Studio opens a local README authoring workspace. Press Ctrl+C to stop.
 Port defaults to an available loopback port; --no-open prints the URL only.
 
 Options:
@@ -160,7 +160,7 @@ export async function runCli(args = process.argv.slice(2), context = {}) {
     const { startStudio, openStudio } = await import("./studio/server.js");
     const studio = await startStudio({ root: cwd, configPath: options.config, port: options.port });
     writeLine(stdout, `Studio: ${studio.url}`);
-    writeLine(stdout, "Local, read-only preview. Press Ctrl+C to stop.");
+    writeLine(stdout, "Local authoring workspace. Press Ctrl+C to stop.");
     if (options.open) {
       try { await openStudio(studio.url); }
       catch { writeLine(stderr, "Could not open a browser. Open the Studio URL above."); }

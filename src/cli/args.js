@@ -35,7 +35,7 @@ export function parseCliArgs(args = process.argv.slice(2)) {
     throw new Error("Studio port must be an integer from 0 to 65535");
   }
   if (studio && (parsed.values.yes || parsed.values.force || parsed.values.check || parsed.values["dry-run"] || parsed.values["save-config"] || parsed.values.output !== "README.md")) {
-    throw new Error("Studio is read-only; generation and write flags are not supported");
+    throw new Error("Studio uses its own authoring flow; read-only generation flags are not supported");
   }
 
   return {

@@ -1,3 +1,23 @@
+# Studio authoring review — 13 September 2026
+
+Result: desktop and mobile authoring flows passed in an isolated fixture. No project README was overwritten through Studio.
+
+The Composer, Document Desk, and Proof Sheet are now Compose, live preview, and Evidence/Review roles in one local app. Creative Production source-preservation and Product Design implementation guidance informed the retained off-white/ink palette, restrained lime selection, cobalt focus, thin borders, and document-first layout. The wider authoring panel is an intentional adaptation of the recorded Document Desk reference, not a claim of exact fidelity to missing mockups.
+
+Screenshots: `/tmp/create-readme-authoring-desktop.png` (1440 × 1024) and `/tmp/create-readme-authoring-mobile.png` (390 × 844 viewport, full-page capture). Desktop has independently scrolling composer/document panels and persistent status; mobile stacks controls and preview. Measured mobile document width was 375 px within a 390 px viewport, with no horizontal page overflow. Code remains independently scrollable. Visible focus and readable labels were inspected.
+
+Browser verification used `/tmp/create-readme-authoring-9n4Lbw`, never another repository. Desktop: edited title/description/features, moved Usage before Installation, enabled Features, selected the Node badge and flat style, rescanned without losing draft choices, inspected evidence and the full before/after replacement, saved config separately, then explicitly wrote README. An external README edit after review produced a conflict and retained both the external content and draft; fresh review enabled recovery. Config retained its unknown `customFutureField` without adding detected defaults.
+
+Mobile: edited title, moved Features up, rescanned with draft retention, inspected Markdown/evidence/review, refused a config changed after review, then separately saved config and README after fresh review. The replacement review is a full before/after comparison, not an inline patch or handwritten-content merge. File changes were confirmed on disk. Badge comparison deliberately uses descriptions and generated URLs, not remote artwork.
+
+Verification: 59 Node tests passed; production dependency audit reported zero vulnerabilities; package dry-run includes authoring server and all three public assets. No site files changed. Native browser opening on Windows/Linux was not exercised. Atomic replacement uses repeated local path/revision checks but cannot eliminate every hostile filesystem race with Node's path-based APIs. Drafts remain in memory until explicitly saved as configuration.
+
+Final focused review found and corrected two P2 issues: technology editing now exposes and retains category metadata; badge controls use the active model's inherited selection, including a license override. A browser regression saved a second technology while retaining React's `UI library` category and selected Node while retaining the inherited MIT badge. Config bytes confirmed both fixes. Successful-write refresh warnings are surfaced without misreporting the write as failed.
+
+## Historical read-only slice
+
+The following records the earlier milestone; its scope limits and test count are historical, superseded by the authoring review above.
+
 # Studio implementation review
 
 final result: passed
